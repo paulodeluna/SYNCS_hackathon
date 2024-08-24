@@ -16,7 +16,7 @@ personal_data = {}
 completed_quests = {}
 
 # Dictionary to store challenges
-challenges_dict = {"Quadrangle": "quadrangle"}
+challenges_dict = {"Quadrangle": "quadrangle", "TownHall": "townhall", "CS Building": "CS building", "PNR Building": "PNR Building"}
 
 @app.route('/')
 def index():
@@ -139,7 +139,7 @@ def submit_quadrangle():
     filename = os.path.join(app.config['UPLOAD_FOLDER'], image_file.filename)
     image_file.save(filename)
 
-    if brick_count == '69':
+    if brick_count == '42':
         if 'points' in session:
             session['points'] += 50
         else:
