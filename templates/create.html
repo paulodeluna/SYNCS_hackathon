@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Challenge</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .home-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <a href="{{ url_for('home') }}" class="btn btn-secondary home-button">Home</a>
+        <h1 class="mb-4">Create Your Own Challenge!</h1>
+        <form action="{{ url_for('create_challenge') }}" method="POST">
+            <div class="form-group">
+                <label for="challenge_name">Challenge Name:</label>
+                <input type="text" id="challenge_name" name="name" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+</body>
+</html>
+
+

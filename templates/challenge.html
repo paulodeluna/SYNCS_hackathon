@@ -3,21 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scavenger Hunt</title>
+    <title>Challenge</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .home-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        #message {
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function validateChallenge() {
+            const challengeName = document.getElementById('challenge_input').value;
+
+            fetch('/validate_challenge', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `challenge_name=${encodeURIComponent(challengeName)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.getElementById('message');
+                if (data.status === "success") {
+                    messageDiv.textContent = data.message;
+                    messageDiv.style.color = 'green';
+                } else {
+                    messageDiv.textContent = data.message;
+                    messageDiv.style.color = 'red';
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-    <h1>Scavenger Hunt Quests</h1>
-
-    <ul>
-        {% for quest in quests %}
-            <li>
-                <h2>{{ quest.name }}</h2>
-                <p>{{ quest.description }}</p>
-                <a href="#">Join Quest</a>
-            </li>
-        {% endfor %}
-    </ul>
-
-    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    <div class="container mt-5">
+        <a href="{{ url_for('home') }}" class="btn btn-secondary home-button">Home</a>
+        <h1>Check Challenge</h1>
+        <div class="form-group">
+            <label for="challenge_input">Challenge Name:</label>
+            <input type="text" id="challenge_input" class="form-control" placeholder="Enter challenge name">
+        </div>
+        <button class="btn btn-primary" onclick="validateChallenge()">Check</button>
+        <div id="message" class="mt-3"></div>
+        
+        <h2 class="mt-5">Challenges:</h2>
+        <ul class="list-group">
+            {% for challenge in challenges %}
+                <li class="list-group-item">{{ challenge }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
+

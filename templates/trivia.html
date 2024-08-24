@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .home-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Home Button -->
+        <a href="{{ url_for('home') }}" class="btn btn-secondary home-button">Home</a>
+        <h2>Hi {{ username }} :)</h2>
+        
+        <!-- Custom Question Form -->
+        <form method="POST" action="{{ url_for('trivia') }}">
+            <h3>Submit a Custom Question:</h3>
+            <div class="form-group">
+                <label for="question">Question</label>
+                <input type="text" class="form-control" id="question" name="question" required>
+            </div>
+            <div class="form-group">
+                <label for="answer">Answer</label>
+                <input type="text" class="form-control" id="answer" name="answer" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        
+        <!-- Display Custom Questions and Answers -->
+        <h3 class="mt-5">Submitted Questions and Answers:</h3>
+        <ul class="list-group">
+            {% for question, answer in qa_data %}
+                <li class="list-group-item">
+                    <strong>Q:</strong> {{ question }} <br>
+                    <strong>A:</strong> {{ answer }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Personal Questions Section -->
+        <h3 class="mt-5">Personal Questions:</h3>
+        <form method="POST" action="{{ url_for('trivia') }}">
+            <div class="form-group">
+                <label for="major">What's your major?</label>
+                <input type="text" class="form-control" id="major" name="major">
+            </div>
+            <div class="form-group">
+                <label for="introvert-extrovert">Are you an introvert/extrovert?</label>
+                <input type="text" class="form-control" id="introvert-extrovert" name="introvert-extrovert">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <!-- Display Personal Questions and Answers -->
+        <h3 class="mt-5">Your Personal Answers:</h3>
+        <ul class="list-group">
+            {% if personal_data %}
+                <li class="list-group-item">
+                    <strong>Q: What's your major?</strong> <br>
+                    <strong>A:</strong> {{ personal_data.get('major', 'Not answered yet') }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Q: Are you an introvert/extrovert?</strong> <br>
+                    <strong>A:</strong> {{ personal_data.get('introvert_extrovert', 'Not answered yet') }}
+                </li>
+            {% else %}
+                <li class="list-group-item">No personal answers submitted yet.</li>
+            {% endif %}
+        </ul>
+    </div>
+</body>
+</html>
+
+
