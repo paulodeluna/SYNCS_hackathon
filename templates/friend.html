@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David Beckham Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .question-container {
+            margin: 20px 0;
+        }
+        .answers {
+            margin: 10px 0;
+        }
+        .answers label {
+            display: block;
+            margin: 5px 0;
+        }
+        .submit-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        img {
+            width: 200px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>David Beckham Quiz</h1>
+    <img src="/static/beckham.png" alt="David Beckham">
+
+    <div class="question-container">
+        <p>1. What is David's major?</p>
+        <div class="answers">
+            <label><input type="radio" name="question1" value="Professional Football"> Professional Football</label>
+            <label><input type="radio" name="question1" value="Computer Science"> Computer Science</label>
+        </div>
+    </div>
+
+    <div class="question-container">
+        <p>2. What does David love to do?</p>
+        <div class="answers">
+            <label><input type="radio" name="question2" value="Football"> Football</label>
+            <label><input type="radio" name="question2" value="Tiktok"> Tiktok</label>
+            <label><input type="radio" name="question2" value="Hackathon"> Hackathon</label>
+        </div>
+    </div>
+
+    <button class="submit-button" onclick="submitQuiz()">Submit</button>
+
+    <div id="result"></div>
+
+    <script>
+        function submitQuiz() {
+            let points = 0;
+            const question1Answer = document.querySelector('input[name="question1"]:checked');
+            const question2Answer = document.querySelector('input[name="question2"]:checked');
+
+            // Calculate points based on answers
+            if (question1Answer && question1Answer.value === "Computer Science") {
+                points += 50;
+            }
+
+            if (question2Answer && question2Answer.value === "Hackathon") {
+                points += 50;
+            }
+
+            // Send points to the server
+            fetch('/submit_quiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ points: points })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message.includes('Your current points')) {
+                    document.getElementById('result').textContent = data.message;
+                    document.getElementById('result').className = 'success-message';
+                    setTimeout(() => {
+                        window.location.href = '/home'; // Redirect after 1 second
+                    }, 1000);
+                } else {
+                    document.getElementById('result').textContent = data.message;
+                    document.getElementById('result').className = 'error-message';
+                }
+            })
+            .catch(error => {
+                document.getElementById('result').textContent = 'An error occurred. Please try again.';
+                document.getElementById('result').className = 'error-message';
+            });
+        }
+    </script>
+</body>
+</html>
+

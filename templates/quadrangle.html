@@ -6,80 +6,170 @@
     <title>Quadrangle Scavenger Hunt</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
+        .file-info {
+            margin-top: 10px;
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: normal; /* No bold styling */
         }
-        .container {
-            text-align: center;
-            margin-top: 50px;
-        }
-        img {
-            width: 300px;
+        .popup-content img {
+            max-width: 100%;
             height: auto;
-            border: 2px solid #ccc;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: white;
+            padding: 20px;
             border-radius: 5px;
+            text-align: center;
+            max-width: 90%;
+            max-height: 90%;
         }
-        .description, .message, .question-section, .upload-section {
-            margin: 20px 0;
+        .btn-custom {
+            margin-top: 10px;
         }
-        .message {
-            font-weight: bold;
+        .custom-file-upload {
+            border: 1px solid #ced4da;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            font-size: 1rem;
+            font-weight: 400;
         }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+        .custom-file-upload input[type="file"] {
+            display: none;
         }
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
+        .custom-file-upload:hover {
+            background-color: #e2e6ea;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="{{ url_for('static', filename='quadrangle.png') }}" alt="Quadrangle Image">
-        <div class="description">
-            <h2>Description</h2>
-            <p>This is a Quadrangle Scavenger Hunt.</p>
+    <div class="container mt-5">
+        <h2 class="text-center">Quadrangle Scavenger Hunt</h2>
+        <div class="text-center">
+            <img src="/static/quadrangle.png" alt="Quadrangle Image" class="img-fluid">
         </div>
-        <div class="upload-section">
-            <button class="btn btn-secondary" onclick="document.getElementById('file_input').click()">Upload Image</button>
-            <input type="file" id="file_input" style="display: none;">
-        </div>
-        <div class="question-section mt-4">
-            <p>How many bricks is the Quadrangle made up of? [150 points]</p>
-            <input type="text" id="bricks_input" class="form-control" placeholder="Enter number">
-        </div>
-        <div class="mt-3">
-            <button class="btn btn-primary" onclick="submitBricks()">Submit</button>
-        </div>
-        <div id="message" class="message"></div>
-    </div>
-    <script>
-        function submitBricks() {
-            const bricks = document.getElementById('bricks_input').value;
+        <p class="text-center mt-3">This is a Quadrangle Scavenger Hunt challenge. Please upload an image and provide the number of bricks.</p>
+        
+        <form id="quadrangle-form" enctype="multipart/form-data" class="text-center">
+            <div class="form-group">
+                <label class="custom-file-upload">
+                    <input type="file" name="challenge_image" id="challenge_image" accept="image/*" onchange="showFileInfo()">
+                    Upload Image
+                </label>
+            </div>
+            <div class="file-info" id="file-info"></div>
+            <div class="form-group">
+                <label for="brick-count">How many bricks is the Quadrangle made up of?</label>
+                <input type="text" id="brick-count" name="brick_count" class="form-control">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="submitQuadrangle()">Submit</button>
+        </form>
 
-            fetch('/quadrangle', {
+        <div id="message" class="mt-3 text-center"></div>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <img src="/static/beckham.png" alt="Sample Image" class="img-fluid">
+            <p>Looks like someone else is at Quadrangle too!</p>
+            <button class="btn btn-success btn-custom" onclick="redirectToBeckham()">Form Alliance</button>
+            <button class="btn btn-secondary btn-custom" id="close-popup">Solo Battle</button>
+        </div>
+    </div>
+
+    <script>
+        function showFileInfo() {
+            const fileInput = document.getElementById('challenge_image');
+            const fileInfoDiv = document.getElementById('file-info');
+
+            const file = fileInput.files[0];
+            if (file) {
+                fileInfoDiv.textContent = `File Selected: ${file.name}`;
+            } else {
+                fileInfoDiv.textContent = '';
+            }
+        }
+
+        function submitQuadrangle() {
+            const brickCount = document.getElementById('brick-count').value;
+            const imageFile = document.getElementById('challenge_image').files[0];
+            const messageDiv = document.getElementById('message');
+
+            // Clear any previous messages
+            messageDiv.textContent = '';
+
+            // Validation checks
+            if (!brickCount || !imageFile) {
+                messageDiv.textContent = 'Error: Please fill in all fields and upload an image.';
+                messageDiv.className = 'text-danger';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('brick_count', brickCount);
+            formData.append('challenge_image', imageFile);
+
+            fetch('/submit_quadrangle', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `bricks=${encodeURIComponent(bricks)}`
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
-                const messageDiv = document.getElementById('message');
-                if (data.status === "success") {
+                if (data.success) {
                     messageDiv.textContent = data.message;
-                    messageDiv.style.color = 'green';
-                    // Redirect to home on success
-                    window.location.href = "{{ url_for('home') }}";
+                    messageDiv.className = 'text-success';
+                    setTimeout(() => {
+                        window.location.href = '/home';
+                    }, 1000); // Redirect after 1 second
                 } else {
                     messageDiv.textContent = data.message;
-                    messageDiv.style.color = 'red';
+                    messageDiv.className = 'text-danger';
                 }
             });
         }
+
+        function showPopup() {
+            setTimeout(function() {
+                const popup = document.getElementById('popup');
+                popup.style.display = 'flex';
+            }, 5000); // Show the pop-up after 5 seconds
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function redirectToBeckham() {
+            window.location.href = '/beckham';
+        }
+
+        // Show the pop-up when the page loads after a delay
+        window.onload = function() {
+            showPopup();
+        };
+
+        // Event listener to manually close the pop-up
+        document.getElementById('close-popup').addEventListener('click', closePopup);
+
+        // Optional: Close the pop-up if the user clicks outside of the pop-up content
+        document.getElementById('popup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup();
+            }
+        });
     </script>
 </body>
 </html>

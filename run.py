@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, get_flashed_messages
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # Replace with a secure key
+app.config['UPLOAD_FOLDER'] = 'uploads'  # Ensure this directory exists or create it
 
 # A simple user database
 users = {'Paulo': 'password123'}
@@ -11,14 +13,10 @@ qa_data = {}
 personal_data = {}
 
 # Dictionary to store challenges
-challenges_dict = {"quadrangle": "quadrangle"}
-
-# Dictionary to store user points
-user_points = {}
+challenges_dict = {"Quadrangle": "quadrangle"}
 
 @app.route('/')
 def index():
-    # Redirect to login page on startup
     return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -27,16 +25,18 @@ def login():
         username = request.form['username']
         password = request.form['password']
         
-        # Simple authentication logic
         if username in users and users[username] == password:
             session['username'] = username
-            user_points[username] = user_points.get(username, 0)  # Initialize points if not present
+            session['points'] = 0  # Reset points to 0 on login
             flash('Login successful!', 'success')
-            return redirect(url_for('home'))  # Redirect to home
+            return redirect(url_for('home'))
         else:
             flash('Invalid username or password.', 'danger')
     
-    return render_template('login.html')
+    # Retrieve flashed messages and clear them
+    messages = get_flashed_messages(with_categories=True)
+    return render_template('login.html', messages=messages)
+
 
 @app.route('/home')
 def home():
@@ -44,7 +44,7 @@ def home():
         return redirect(url_for('login'))
     
     username = session['username']
-    points = user_points.get(username, 0)
+    points = session.get('points', 0)
     return render_template('home.html', username=username, points=points)
 
 @app.route('/trivia', methods=['GET', 'POST'])
@@ -58,13 +58,11 @@ def trivia():
         question = request.form.get('question')
         answer = request.form.get('answer')
         
-        # Handling custom questions
         if question and answer:
             if username not in qa_data:
                 qa_data[username] = []
             qa_data[username].append((question, answer))
         
-        # Handling personal questions
         major = request.form.get('major')
         introvert_extrovert = request.form.get('introvert-extrovert')
         
@@ -104,7 +102,6 @@ def create_challenge():
 
 @app.route('/challenge')
 def challenge():
-    # Pass only the keys of the challenges_dict to the template
     challenges = list(challenges_dict.keys())
     return render_template('challenge.html', challenges=challenges)
 
@@ -120,24 +117,55 @@ def validate_challenge():
 def create():
     return render_template('create.html')
 
-@app.route('/quadrangle', methods=['GET', 'POST'])
+@app.route('/quadrangle')
 def quadrangle():
-    if request.method == 'POST':
-        bricks = request.form.get('bricks')
-        if bricks:
-            # Process the bricks data (e.g., validate, store, etc.)
-            username = session.get('username')
-            if username:
-                # Increment points by 150
-                user_points[username] = user_points.get(username, 0) + 150
-            flash('Your submission was successful!', 'success')
-            return jsonify({"status": "success", "message": "Your submission was successful!"})
-        else:
-            return jsonify({"status": "error", "message": "Please enter a number of bricks."})
-    
     return render_template('quadrangle.html')
 
+@app.route('/submit_quadrangle', methods=['POST'])
+def submit_quadrangle():
+    brick_count = request.form.get('brick_count')
+    image_file = request.files.get('challenge_image')
+
+    if not brick_count or not image_file:
+        return jsonify({'success': False, 'message': 'Error: Please fill in all fields and upload an image.'})
+
+    # Save the uploaded image
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
+        
+    filename = os.path.join(app.config['UPLOAD_FOLDER'], image_file.filename)
+    image_file.save(filename)
+
+    if brick_count == '69':
+        if 'points' in session:
+            session['points'] += 50
+        else:
+            session['points'] = 50
+        return jsonify({'success': True, 'message': 'Correct! You have earned 50 points.'})
+    else:
+        return jsonify({'success': False, 'message': 'Incorrect. No points added.'})
+
+@app.route('/friend')
+def friend():
+    return render_template('friend.html')
+
+@app.route('/submit_quiz', methods=['POST'])
+def submit_quiz():
+    data = request.json
+    points = data.get('points', 0)
+
+    if 'points' in session:
+        session['points'] += points
+    else:
+        session['points'] = points
+
+    return jsonify({'message': f'Quiz submitted! Your current points: {session["points"]}'})
+
+@app.route('/beckham')
+def beckham():
+    return render_template('beckham.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 

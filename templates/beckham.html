@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadrangle Scavenger Hunt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            margin: 50px auto;
+            max-width: 800px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            width: 300px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .description {
+            margin: 20px 0;
+        }
+        .message {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .question-container {
+            margin: 20px 0;
+        }
+        #beckham-container {
+            border: 2px solid #000;
+            margin-top: 50px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #beckham-container img {
+            width: 100px;
+            height: auto;
+            margin-right: 20px;
+        }
+        #beckham-container p {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .error-message {
+            color: red;
+        }
+        .success-message {
+            color: green;
+        }
+        .quadrangle-image {
+            width: 100%;
+            max-width: 600px;
+        }
+        input[type="text"] {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            background-color: #007bff;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .image-preview {
+            display: none;
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+        }
+        .custom-file-upload {
+            border: 1px solid #ced4da;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        .custom-file-upload input[type="file"] {
+            display: none;
+        }
+        .file-info {
+            margin-top: 10px;
+            color: #6c757d; /* Gray color for unbolded text */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="/static/quadrangle.png" alt="Quadrangle Image" class="quadrangle-image">
+        <h2>Description</h2>
+        <p>This is a Quadrangle Scavenger Hunt.</p>
+
+        <form id="quadrangle-form" enctype="multipart/form-data">
+            <label class="custom-file-upload" for="challenge_image">
+                <input type="file" name="challenge_image" id="challenge_image" accept="image/*" onchange="showFileInfo()">
+                Upload Image
+            </label><br>
+            <img id="image-preview" class="image-preview" alt="Image Preview">
+            <br><br>
+
+            <div class="file-info" id="file-info"></div>
+            <div class="question-container">
+                <p>How many bricks is the Quadrangle made up of?</p>
+                <input type="text" id="brick-count" name="brick_count">
+            </div>
+
+            <button type="button" onclick="submitQuadrangle()">Submit</button>
+        </form>
+
+        <div id="message" class="message"></div>
+    </div>
+
+    <div id="beckham-container">
+        <img src="/static/beckham.png" alt="David Beckham">
+        <p>DAVID BECKHAM has joined you on this quest!</p>
+    </div>
+
+    <script>
+        function showFileInfo() {
+            const fileInput = document.getElementById('challenge_image');
+            const fileInfoDiv = document.getElementById('file-info');
+
+            const file = fileInput.files[0];
+            if (file) {
+                fileInfoDiv.textContent = `File Selected: ${file.name}`;
+            } else {
+                fileInfoDiv.textContent = '';
+            }
+        }
+
+        function submitQuadrangle() {
+            const brickCount = document.getElementById('brick-count').value;
+            const imageFile = document.getElementById('challenge_image').files[0];
+            const messageDiv = document.getElementById('message');
+
+            // Clear any previous messages
+            messageDiv.textContent = '';
+
+            // Validation checks
+            if (!brickCount || !imageFile) {
+                messageDiv.textContent = 'Error: Please fill in all fields and upload an image.';
+                messageDiv.className = 'error-message';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('brick_count', brickCount);
+            formData.append('challenge_image', imageFile);
+
+            fetch('/submit_quadrangle', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageDiv.textContent = data.message;
+                    messageDiv.className = 'success-message';
+                    setTimeout(() => {
+                        window.location.href = '/friend';
+                    }, 1000); // Redirect after 1 second
+                } else {
+                    messageDiv.textContent = data.message;
+                    messageDiv.className = 'error-message';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
