@@ -1,1 +1,6 @@
-Write a todo. 
+- [ ] Set up database
+- [ ] Implement user authentication
+- [ ] Design homepage UI
+- [ ] write the MATCH pop up
+- [ ] Deploy to production
+
