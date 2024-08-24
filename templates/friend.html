@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>David Beckham Quiz</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
             background-color: #f5f5f5;
         }
-        h1 {
-            margin-bottom: 20px;
-            color: #333;
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
         }
         .question-container {
             margin: 20px 0;
@@ -53,29 +55,31 @@
     </style>
 </head>
 <body>
-    <h1>David Beckham Quiz</h1>
-    <img src="/static/beckham.png" alt="David Beckham">
+    <div class="container">
+        <h1 class="mb-4">David Beckham Quiz</h1>
+        <img src="/static/beckham.png" alt="David Beckham">
 
-    <div class="question-container">
-        <p>1. What is David's major?</p>
-        <div class="answers">
-            <label><input type="radio" name="question1" value="Professional Football"> Professional Football</label>
-            <label><input type="radio" name="question1" value="Computer Science"> Computer Science</label>
+        <div class="question-container">
+            <p>1. What is David's major?</p>
+            <div class="answers">
+                <label><input type="radio" name="question1" value="Professional Football"> Professional Football</label>
+                <label><input type="radio" name="question1" value="Computer Science"> Computer Science</label>
+            </div>
         </div>
-    </div>
 
-    <div class="question-container">
-        <p>2. What does David love to do?</p>
-        <div class="answers">
-            <label><input type="radio" name="question2" value="Football"> Football</label>
-            <label><input type="radio" name="question2" value="Tiktok"> Tiktok</label>
-            <label><input type="radio" name="question2" value="Hackathon"> Hackathon</label>
+        <div class="question-container">
+            <p>2. What does David love to do?</p>
+            <div class="answers">
+                <label><input type="radio" name="question2" value="Football"> Football</label>
+                <label><input type="radio" name="question2" value="Tiktok"> Tiktok</label>
+                <label><input type="radio" name="question2" value="Hackathon"> Hackathon</label>
+            </div>
         </div>
+
+        <button class="submit-button" onclick="submitQuiz()">Submit</button>
+
+        <div id="result" class="mt-3"></div>
     </div>
-
-    <button class="submit-button" onclick="submitQuiz()">Submit</button>
-
-    <div id="result"></div>
 
     <script>
         function submitQuiz() {
@@ -121,4 +125,5 @@
     </script>
 </body>
 </html>
+
 

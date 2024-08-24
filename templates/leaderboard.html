@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .container {
+            border: 2px solid #000;
+            padding: 20px;
+            margin-bottom: 20px;
+            max-width: 600px; /* Limit the width */
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+            background-color: #f9f9f9; /* Light background color */
+        }
+        h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .list-item {
+            font-size: 24px;
+            margin: 5px 0;
+        }
+        .home-button {
+            margin-top: 20px;
+        }
+        .btn-custom {
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>LEADERBOARD</h1>
+
+    <div class="container">
+        <h2>Quest</h2>
+        <p id="quest-name">{{ quest_name }}</p>
+    </div>
+
+    <div class="container">
+        <h2>TOP 3 STANDINGS</h2>
+        <p class="list-item">1. Jensen Huang</p>
+        <p class="list-item">2. Elon Musk</p>
+        <p class="list-item">3. Jeff Bezos</p>
+    </div>
+
+    <div class="container">
+        <h2>Points</h2>
+        <p id="points">{{ points }}</p>
+    </div>
+
+    <div class="home-button">
+        <a href="{{ url_for('home') }}" class="btn btn-secondary btn-custom">Home</a>
+    </div>
+</body>
+</html>
+

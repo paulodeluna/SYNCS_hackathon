@@ -12,6 +12,9 @@ users = {'Paulo': 'password123'}
 qa_data = {}
 personal_data = {}
 
+# Dictionary to store completed quests
+completed_quests = {}
+
 # Dictionary to store challenges
 challenges_dict = {"Quadrangle": "quadrangle"}
 
@@ -141,6 +144,7 @@ def submit_quadrangle():
             session['points'] += 50
         else:
             session['points'] = 50
+        completed_quests['Quadrangle'] = 'Quadrangle'
         return jsonify({'success': True, 'message': 'Correct! You have earned 50 points.'})
     else:
         return jsonify({'success': False, 'message': 'Incorrect. No points added.'})
@@ -165,7 +169,10 @@ def submit_quiz():
 def beckham():
     return render_template('beckham.html')
 
+@app.route('/leaderboard')
+def leaderboard():
+    quest_name = completed_quests.get('Quadrangle', 'No Quest Completed Yet')
+    return render_template('leaderboard.html', quest_name=quest_name, points=session['points'])
+
 if __name__ == '__main__':
     app.run(debug=True)
-
-

@@ -11,13 +11,20 @@
             top: 10px;
             right: 10px;
         }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
     </style>
 </head>
 <body>
     <div class="container mt-5">
         <a href="{{ url_for('home') }}" class="btn btn-secondary home-button">Home</a>
-        <h1 class="mb-4">Create Your Own Challenge!</h1>
-        <form action="{{ url_for('create_challenge') }}" method="POST">
+        <h1 class="mb-4 text-center">Create Your Own Challenge!</h1>
+        <form action="{{ url_for('create_challenge') }}" method="POST" class="w-50">
             <div class="form-group">
                 <label for="challenge_name">Challenge Name:</label>
                 <input type="text" id="challenge_name" name="name" class="form-control" required>
@@ -27,5 +34,6 @@
     </div>
 </body>
 </html>
+
 
 

@@ -6,10 +6,14 @@
     <title>Trivia Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
         .next-button {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
         }
     </style>
 </head>
@@ -18,7 +22,7 @@
         <h2>Hi {{ username }} :)</h2>
         
         <!-- Custom Question Form -->
-        <form method="POST" action="{{ url_for('trivia') }}">
+        <form method="POST" action="{{ url_for('trivia') }}" class="mb-5">
             <h3>Submit a Custom Question:</h3>
             <div class="form-group">
                 <label for="question">Question</label>
@@ -44,7 +48,7 @@
 
         <!-- Personal Questions Section -->
         <h3 class="mt-5">Personal Questions:</h3>
-        <form method="POST" action="{{ url_for('trivia') }}">
+        <form method="POST" action="{{ url_for('trivia') }}" class="mb-5">
             <div class="form-group">
                 <label for="major">What's your major?</label>
                 <input type="text" class="form-control" id="major" name="major">
@@ -78,6 +82,4 @@
     </div>
 </body>
 </html>
-
-
 
