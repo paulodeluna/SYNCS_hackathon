@@ -4,7 +4,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # Replace with a secure key
 
 # A simple user database
-users = {'testuser': 'password123'}
+users = {'Paulo': 'password123'}
 
 # Store questions and answers
 qa_data = {}
@@ -12,6 +12,9 @@ personal_data = {}
 
 # Dictionary to store challenges
 challenges_dict = {"quadrangle": "quadrangle"}
+
+# Dictionary to store user points
+user_points = {}
 
 @app.route('/')
 def index():
@@ -27,12 +30,22 @@ def login():
         # Simple authentication logic
         if username in users and users[username] == password:
             session['username'] = username
+            user_points[username] = user_points.get(username, 0)  # Initialize points if not present
             flash('Login successful!', 'success')
-            return redirect(url_for('trivia'))
+            return redirect(url_for('home'))  # Redirect to home
         else:
             flash('Invalid username or password.', 'danger')
     
     return render_template('login.html')
+
+@app.route('/home')
+def home():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    
+    username = session['username']
+    points = user_points.get(username, 0)
+    return render_template('home.html', username=username, points=points)
 
 @app.route('/trivia', methods=['GET', 'POST'])
 def trivia():
@@ -70,13 +83,9 @@ def trivia():
 def dashboard():
     return "Welcome to the Dashboard!"
 
-@app.route('/home')
-def home():
-    return render_template('home.html')
-
 @app.route('/join_challenge')
 def join_challenge():
-    return redirect(url_for('challenge'))
+    return redirect(url_for('trivia'))
 
 @app.route('/add_challenge')
 def add_challenge():
@@ -99,7 +108,6 @@ def challenge():
     challenges = list(challenges_dict.keys())
     return render_template('challenge.html', challenges=challenges)
 
-
 @app.route('/validate_challenge', methods=['POST'])
 def validate_challenge():
     input_name = request.form.get('challenge_name')
@@ -112,7 +120,24 @@ def validate_challenge():
 def create():
     return render_template('create.html')
 
+@app.route('/quadrangle', methods=['GET', 'POST'])
+def quadrangle():
+    if request.method == 'POST':
+        bricks = request.form.get('bricks')
+        if bricks:
+            # Process the bricks data (e.g., validate, store, etc.)
+            username = session.get('username')
+            if username:
+                # Increment points by 150
+                user_points[username] = user_points.get(username, 0) + 150
+            flash('Your submission was successful!', 'success')
+            return jsonify({"status": "success", "message": "Your submission was successful!"})
+        else:
+            return jsonify({"status": "error", "message": "Please enter a number of bricks."})
+    
+    return render_template('quadrangle.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
-
 

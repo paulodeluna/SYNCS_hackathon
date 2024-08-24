@@ -39,7 +39,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>Welcome User!</h1>
+        <h1>Welcome {{ username }}!</h1>
         <button class="btn btn-secondary logo-button" onclick="redirectToLogin()">Trivia</button>
     </div>
     
@@ -49,7 +49,7 @@
     </div>
     
     <div class="points-container">
-        Points:
+        <h2>Points: {{ points }}</h2>
     </div>
 
     <script>
@@ -58,13 +58,15 @@
         }
 
         function redirectToLogin() {
-            window.location.href = "{{ url_for('redirect_to_login') }}";
+            window.location.href = "{{ url_for('trivia') }}"; // Ensure this redirects to the trivia page
         }
 
         function createChallenge() {
-            window.location.href = "{{ url_for('add_challenge') }}";
+            window.location.href = "{{ url_for('create') }}"; // Ensure this redirects to the create page
         }
     </script>
 </body>
 </html>
+
+
 

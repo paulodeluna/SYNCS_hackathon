@@ -6,17 +6,15 @@
     <title>Trivia Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        .home-button {
+        .next-button {
             position: absolute;
-            top: 10px;
+            bottom: 10px;
             right: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container mt-5">
-        <!-- Home Button -->
-        <a href="{{ url_for('home') }}" class="btn btn-secondary home-button">Home</a>
         <h2>Hi {{ username }} :)</h2>
         
         <!-- Custom Question Form -->
@@ -74,8 +72,12 @@
                 <li class="list-group-item">No personal answers submitted yet.</li>
             {% endif %}
         </ul>
+        
+        <!-- Next Button -->
+        <a href="{{ url_for('challenge') }}" class="btn btn-secondary next-button">Next</a>
     </div>
 </body>
 </html>
+
 
 

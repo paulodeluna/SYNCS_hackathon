@@ -32,6 +32,8 @@
                 if (data.status === "success") {
                     messageDiv.textContent = data.message;
                     messageDiv.style.color = 'green';
+                    // Redirect to quadrangle.html on success
+                    window.location.href = "{{ url_for('quadrangle') }}";
                 } else {
                     messageDiv.textContent = data.message;
                     messageDiv.style.color = 'red';
@@ -60,4 +62,5 @@
     </div>
 </body>
 </html>
+
 
