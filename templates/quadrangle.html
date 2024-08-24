@@ -13,8 +13,8 @@
         }
         .file-info {
             margin-top: 10px;
-            font-size: 0.875rem; /* Smaller font size */
-            font-weight: normal; /* No bold styling */
+            font-size: 0.875rem;
+            font-weight: normal;
         }
         .popup {
             display: none;
@@ -30,21 +30,21 @@
         .popup-content {
             background: white;
             padding: 20px;
-            padding-top: 80px; /* Added top padding */
+            padding-top: 80px;
             border-radius: 5px;
             text-align: center;
             max-width: 90%;
             max-height: 90%;
         }
         .popup-content img {
-            width: 150px; /* Fixed width */
-            height: 150px; /* Fixed height */
-            border-radius: 50%; /* Make the image round */
-            object-fit: cover; /* Ensure the image covers the area */
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
         }
         .popup-content p {
-            margin-top: 20px; /* Add space above the text */
-            font-size: 1rem; /* Adjust font size if needed */
+            margin-top: 20px;
+            font-size: 1rem;
         }
         .btn-custom {
             margin-top: 10px;
@@ -102,6 +102,9 @@
         </div>
     </div>
 
+    <!-- Add the audio element -->
+    <audio id="ping-audio" src="/static/ping.mp3"></audio>
+
     <script>
         function showFileInfo() {
             const fileInput = document.getElementById('challenge_image');
@@ -156,7 +159,10 @@
         function showPopup() {
             setTimeout(function() {
                 const popup = document.getElementById('popup');
+                const pingAudio = document.getElementById('ping-audio');
+                
                 popup.style.display = 'flex';
+                pingAudio.play(); // Play the audio when the popup appears
             }, 5000); // Show the pop-up after 5 seconds
         }
 
@@ -185,6 +191,7 @@
     </script>
 </body>
 </html>
+
 
 
 
