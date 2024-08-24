@@ -16,10 +16,6 @@
             font-size: 0.875rem; /* Smaller font size */
             font-weight: normal; /* No bold styling */
         }
-        .popup-content img {
-            max-width: 100%;
-            height: auto;
-        }
         .popup {
             display: none;
             position: fixed;
@@ -34,10 +30,21 @@
         .popup-content {
             background: white;
             padding: 20px;
+            padding-top: 80px; /* Added top padding */
             border-radius: 5px;
             text-align: center;
             max-width: 90%;
             max-height: 90%;
+        }
+        .popup-content img {
+            width: 150px; /* Fixed width */
+            height: 150px; /* Fixed height */
+            border-radius: 50%; /* Make the image round */
+            object-fit: cover; /* Ensure the image covers the area */
+        }
+        .popup-content p {
+            margin-top: 20px; /* Add space above the text */
+            font-size: 1rem; /* Adjust font size if needed */
         }
         .btn-custom {
             margin-top: 10px;
@@ -91,7 +98,7 @@
             <img src="/static/beckham.png" alt="Sample Image" class="img-fluid">
             <p>Looks like someone else is at Quadrangle too!</p>
             <button class="btn btn-success btn-custom" onclick="redirectToBeckham()">Form Alliance</button>
-            <button class="btn btn-secondary btn-custom" id="close-popup">Solo Battle</button>
+            <button class="btn btn-secondary btn-custom" id="close-popup">Solo Quest</button>
         </div>
     </div>
 
@@ -178,5 +185,6 @@
     </script>
 </body>
 </html>
+
 
 

@@ -42,27 +42,28 @@
         }
         #beckham-container {
             border: 2px solid #000;
-            margin-top: 50px;
-            padding: 20px;
+            margin: 50px auto;
+            padding: 10px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            justify-content: flex-start;
+            width: fit-content; /* Fit container width to content */
             background-color: #f9f9f9;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         #beckham-container img {
             width: 100px;
-            height: auto;
-            margin-right: 20px;
+            height: 100px; /* Ensure height matches width for a circle */
+            border-radius: 50%; /* Make the image circular */
+            object-fit: cover; /* Ensure the image covers the area */
+            margin-right: 15px; /* Adjust margin to fit better */
         }
-        #beckham-container p {
+        #beckham-text {
             font-size: 18px;
             font-weight: bold;
             margin: 0;
+            text-align: left; /* Left-align text */
         }
         .error-message {
             color: red;
@@ -118,6 +119,17 @@
             margin-top: 10px;
             color: #6c757d; /* Gray color for unbolded text */
         }
+        .upload-button-container {
+            display: flex;
+            justify-content: center; /* Center the upload button */
+            width: 100%;
+        }
+        .submit-button-container {
+            display: flex;
+            justify-content: center; /* Center the submit button */
+            width: 100%;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -127,10 +139,12 @@
         <p>This is a Quadrangle Scavenger Hunt.</p>
 
         <form id="quadrangle-form" enctype="multipart/form-data">
-            <label class="custom-file-upload" for="challenge_image">
-                <input type="file" name="challenge_image" id="challenge_image" accept="image/*" onchange="showFileInfo()">
-                Upload Image
-            </label><br>
+            <div class="upload-button-container">
+                <label class="custom-file-upload" for="challenge_image">
+                    <input type="file" name="challenge_image" id="challenge_image" accept="image/*" onchange="showFileInfo()">
+                    Upload Image
+                </label>
+            </div>
             <img id="image-preview" class="image-preview" alt="Image Preview">
             <br><br>
 
@@ -140,7 +154,9 @@
                 <input type="text" id="brick-count" name="brick_count">
             </div>
 
-            <button type="button" onclick="submitQuadrangle()">Submit</button>
+            <div class="submit-button-container">
+                <button type="button" onclick="submitQuadrangle()">Submit</button>
+            </div>
         </form>
 
         <div id="message" class="message"></div>
@@ -148,7 +164,9 @@
 
     <div id="beckham-container">
         <img src="/static/beckham.png" alt="David Beckham">
-        <p>DAVID BECKHAM has joined you on this quest!</p>
+        <div id="beckham-text">
+            <p>Emily has joined you on this quest!</p>
+        </div>
     </div>
 
     <script>
@@ -204,5 +222,4 @@
     </script>
 </body>
 </html>
-
 

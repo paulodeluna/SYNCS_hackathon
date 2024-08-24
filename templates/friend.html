@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>David Beckham Quiz</title>
+    <title>Emily's Quiz</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
+            text-align: center; /* Center-align the header and image */
         }
         .container {
             display: flex;
@@ -20,6 +21,8 @@
         }
         .question-container {
             margin: 20px 0;
+            text-align: left; /* Align text left */
+            max-width: 500px; /* Restrict width for better alignment */
         }
         .answers {
             margin: 10px 0;
@@ -27,6 +30,8 @@
         .answers label {
             display: block;
             margin: 5px 0;
+            padding-left: 20px; /* Indent answers for better readability */
+            text-align: left; /* Ensure answers are left-aligned */
         }
         .submit-button {
             padding: 10px 20px;
@@ -47,28 +52,30 @@
             font-weight: bold;
         }
         img {
-            width: 200px;
-            height: auto;
-            border-radius: 8px;
+            width: 150px; /* Set to desired width */
+            height: 150px; /* Set to same as width for a circle */
+            border-radius: 50%; /* Make the image circular */
+            object-fit: cover; /* Ensure the image covers the area */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* Space below the image */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="mb-4">David Beckham Quiz</h1>
+        <h1 class="mb-4">Emily's Quiz</h1>
         <img src="/static/beckham.png" alt="David Beckham">
 
         <div class="question-container">
-            <p>1. What is David's major?</p>
+            <p>1. What is Emily's major?</p>
             <div class="answers">
-                <label><input type="radio" name="question1" value="Professional Football"> Professional Football</label>
+                <label><input type="radio" name="question1" value="Professional Football"> Biology</label>
                 <label><input type="radio" name="question1" value="Computer Science"> Computer Science</label>
             </div>
         </div>
 
         <div class="question-container">
-            <p>2. What does David love to do?</p>
+            <p>2. What does Emily love to do?</p>
             <div class="answers">
                 <label><input type="radio" name="question2" value="Football"> Football</label>
                 <label><input type="radio" name="question2" value="Tiktok"> Tiktok</label>
@@ -125,5 +132,6 @@
     </script>
 </body>
 </html>
+
 
 
