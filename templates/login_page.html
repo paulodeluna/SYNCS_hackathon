@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Hi {{ username }}</h2>
+        
+        <form method="POST" action="{{ url_for('login_page') }}">
+            <div class="form-group">
+                <label for="question">Question</label>
+                <input type="text" class="form-control" id="question" name="question" required>
+            </div>
+            <div class="form-group">
+                <label for="answer">Answer</label>
+                <input type="text" class="form-control" id="answer" name="answer" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        
+        <h3 class="mt-5">Submitted Questions and Answers:</h3>
+        <ul class="list-group">
+            {% for question, answer in qa_data %}
+                <li class="list-group-item">
+                    <strong>Q:</strong> {{ question }} <br>
+                    <strong>A:</strong> {{ answer }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
